@@ -14,7 +14,8 @@ namespace VideoRental
 
     public void addRental(Rental arg) { customerRental.Add(arg); }
     public string getName() { return customerName; }
-
+    
+     //대여 시 영화별 대여금, 포인트 계산
     public string statement()
     {
         double totalAmount = 0.0;
