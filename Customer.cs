@@ -21,9 +21,15 @@ namespace VideoRental
             double totalAmount = 0.0;
             int frequentRenterPoints = 0;
             StringBuilder result = new StringBuilder();
+            StringBuilder newReceipt = new StringBuilder();
 
             result.AppendLine("Rental Record for " + getName());
 
+            //////////////////
+            newReceipt.AppendLine("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
+            newReceipt.AppendLine("[Genre]".PadRight(20) + "[title]".PadRight(10) + "[daysRent]".PadRight(10) + "[amount]");
+            newReceipt.AppendLine("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
+            //////////////////
 
             IEnumerator<Rental> enumerator = customerRental.GetEnumerator();
 
@@ -65,12 +71,18 @@ namespace VideoRental
                         && each.getDaysRented() > 1) frequentRenterPoints++;
 
                 // Show figures for this rental
+                // 영화이름, 가격
                 result.AppendLine("\t" + each.getMovie().getTitle() + "\t" + thisAmount.ToString());
+
+                // 장르, 제목, 대여기간, 가격을 포함한 신규 영수증
+                newReceipt.AppendLine(each.getMovie().getGenre().PadRight(20) + each.getMovie().getTitle().PadRight(10) + String.Format("{0,-10}", each.getDaysRented()) + thisAmount.ToString());
                 totalAmount += thisAmount;
             }
 
             result.AppendLine("Amount owed is " + totalAmount);
             result.AppendLine("You earned " + frequentRenterPoints + " frequent renter points");
+            
+            result.AppendFormat("{0}", newReceipt);
 
             return result.ToString();
         }
