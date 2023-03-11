@@ -7,9 +7,12 @@ namespace VideoRental
 {
   public class Rental
   {
+        //대여 클래스 생성자
     public Rental(Movie movie, int daysRented)
     {
+         //대여할 영화
         rentedMovie = movie;
+        //대여할 날짜
         nDaysRented = daysRented;
     }
 

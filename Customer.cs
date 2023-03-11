@@ -42,20 +42,20 @@ namespace VideoRental
                 {
                     //REGULAR는 1~2일은 2원
                     //3일 부터는 1.5원
-                    case Movie.REGULAR:
+                    case (int)DefConst.PriceCode.REGULAR:
                         thisAmount += 2.0;
                         if (each.getDaysRented() > 2)
                             thisAmount += (each.getDaysRented() - 2) * 1.5;
                         break;
 
                     //NEW_RELEASE는 대여일 * 3원 
-                    case Movie.NEW_RELEASE:
+                    case (int)DefConst.PriceCode.NEW_RELEASE:
                         thisAmount += each.getDaysRented() * 3;
                         break;
 
                     //CHILDRENS는 1~3일까지 1.5원
                     //4일 부터는 1.5원?
-                    case Movie.CHILDRENS:
+                    case (int)DefConst.PriceCode.CHILDRENS:
                         thisAmount += 1.5;
                         if (each.getDaysRented() > 3)
                             thisAmount += (each.getDaysRented() - 3) * 1.5;
@@ -67,7 +67,7 @@ namespace VideoRental
 
                 // Add bonus for a two day new release rental
                 //신작 영화의 경우 2일 이상 대여시 포인트 2원 적립
-                if ((each.getMovie().getPriceCode() == Movie.NEW_RELEASE)
+                if ((each.getMovie().getPriceCode() == (int)DefConst.PriceCode.NEW_RELEASE)
                         && each.getDaysRented() > 1) frequentRenterPoints++;
 
                 // Show figures for this rental
