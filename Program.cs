@@ -37,9 +37,8 @@ namespace VideoRental
             //[개선방향]
             //6,7. 영수증 문자열 만드는 로직 Customer 클래스에서 Rental 클래스로 변경
             //금액, 포인트 계산은 Rental 생성자에서 함
-            Console.Write(Rental.makeReceipt(rentals, customer.getName(), customer.getRentPoint()));
+            Console.Write(Rental.makeReceipt(rentals, customer.customerName, customer.rentPoint));
             
-            Console.ReadKey();
         }
     }
 }
