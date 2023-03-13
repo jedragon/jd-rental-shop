@@ -17,7 +17,7 @@ namespace VideoRental
             this.daysRented = idaysRented;
 
             //[개선방향]
-            //6,7. 영수증 문자열 만드는 로직 Customer 클래스에서 Rental 클래스로 변경
+            //영수증 문자열 만드는 로직 Customer 클래스에서 Rental 클래스로 변경
             //금액, 포인트 계산은 Rental 생성자에서 함
             calcAmount(customer);
         }
@@ -29,7 +29,7 @@ namespace VideoRental
         public static double totalAmount = 0.0;//static 변수로 최종금액 관리
 
         //[개선방향]
-        //6,7. 영수증 문자열 만드는 로직 Customer 클래스에서 Rental 클래스로 변경
+        //영수증 문자열 만드는 로직 Customer 클래스에서 Rental 클래스로 변경
         //금액, 포인트 계산은 Rental 생성자에서 함
         private void calcAmount(Customer customer)
         {
@@ -70,7 +70,7 @@ namespace VideoRental
         }
 
         //[개선방향]
-        //6, 7. 영수증 출력과 포인트, 금액계산 분리, 함수명 statement -> makeReceipt
+        //영수증 출력과 포인트, 금액계산 분리, 함수명 statement -> makeReceipt
         //기존 statement 함수는 함수명이 모호하고, 매개변수가 없어 함수 선언 수정
         public static string makeReceipt(List<Rental> customerRental, string cName, int cPoint)
         {
