@@ -20,7 +20,7 @@ namespace VideoRental
             Movie children2 = new Movie("어린이 2", DefConst.Genre.spaceOpera);
 
             Customer customer = new Customer("고객");
-
+             
 
             //기존 Rental 클래스에서 Price Code를 기준으로 파생클래스 생성
             customer.addRental(new REGULAR(regular1, 2, customer));
