@@ -70,8 +70,6 @@ namespace VideoRental
             totalAmount += this.amount;
         }
 
-
-
         /// <summary>
         /// 포인트 계산 메소드
         /// </summary>
@@ -103,7 +101,6 @@ namespace VideoRental
         public static string makeReceipt(List<Rental> customerRental, string cName, int cPoint)
         {
             StringBuilder receipt = new StringBuilder();     //구 영수증
-            StringBuilder newReceipt = new StringBuilder(); //신규 영수증
 
             receipt.AppendLine("Rental Record for " + cName);
 
