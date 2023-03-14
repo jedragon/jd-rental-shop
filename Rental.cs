@@ -11,7 +11,7 @@ namespace VideoRental
         public Rental(Movie movie, int idaysRented, Customer customer)
         {
             //대여할 영화
-            rentedMovie = movie;
+            this.rentedMovie = movie;
 
             //대여할 날짜
             this.daysRented = idaysRented;
@@ -19,20 +19,16 @@ namespace VideoRental
             //[개선방향]
             //영수증 문자열 만드는 로직 Customer 클래스에서 Rental 클래스로 변경
             //금액, 포인트 계산은 Rental 생성자에서 함
-
-            //금액 계산
-            calcAmount();
-
+            
             //포인트 계산
             calcPoint(customer);
         }
 
         private Movie rentedMovie { get; }
-        private int daysRented { get; set; } //변수명 nDaysRented -> daysRented 로 변경
-        private double amount { get; set; }
+        public int daysRented { get; set; } //변수명 nDaysRented -> daysRented 로 변경
+        public double amount { get; set; }
         public static double totalAmount = 0.0;//static 변수로 최종금액 관리
-
-
+        
         #region 금액/포인트 계산
         //[개선방향]
         //영수증 문자열 만드는 로직 Customer 클래스에서 Rental 클래스로 변경
@@ -41,33 +37,8 @@ namespace VideoRental
         /// 금액 계산 메소드
         /// </summary>
         /// <param name="customer">고객 객체</param>
-        private void calcAmount()
+        public virtual void calcAmount()
         {
-            switch (rentedMovie.moviePriceCode)
-            {
-                //REGULAR는 1~2일은 2원
-                //3일 부터는  2.0원 + 대여일 수 x 1.5원
-                case (int)DefConst.PriceCode.REGULAR:
-                    this.amount += 2.0;
-                    if (daysRented > 2)
-                        this.amount += (daysRented - 2) * 1.5;
-                    break;
-
-                //NEW_RELEASE는 대여일 * 3원 
-                case (int)DefConst.PriceCode.NEW_RELEASE:
-                    this.amount += daysRented * 3;
-                    break;
-
-                //CHILDRENS는 1~3일까지 1.5원
-                //4일 부터는  1.5원 + 대여일 수 x 1.5원
-                case (int)DefConst.PriceCode.CHILDRENS:
-                    this.amount += 1.5;
-                    if (daysRented > 3)
-                        this.amount += (daysRented - 3) * 1.5;
-                    break;
-            }
-
-            totalAmount += this.amount;
         }
 
         /// <summary>
@@ -78,12 +49,6 @@ namespace VideoRental
         {
             // Add frequent renter points
             customer.addPoint();
-            // Add bonus for a two day new release rental
-            //신작 영화의 경우 2일 이상 대여시 포인트 2원 적립
-            if ((rentedMovie.moviePriceCode == (int)DefConst.PriceCode.NEW_RELEASE) && daysRented > 1)
-            {
-                customer.addPoint();
-            }
         }
         #endregion
 
@@ -158,4 +123,61 @@ namespace VideoRental
         }
         #endregion
     }
+
+    #region 파생클래스
+    //Price Code를 기준으로 한 파생클래스 생성
+    public class REGULAR : Rental
+    {
+        public REGULAR(Movie movie, int idaysRented, Customer customer) : base(movie, idaysRented, customer)
+        {
+            calcAmount();
+        }
+
+        public override void calcAmount()
+        {
+            this.amount += 2.0;
+            if (daysRented > 2)
+                this.amount += (daysRented - 2) * 1.5;
+
+            Rental.totalAmount += this.amount;
+        }
+    }
+
+    public class NEW_RELEASE : Rental
+    {
+        public NEW_RELEASE(Movie movie, int idaysRented, Customer customer) : base(movie, idaysRented, customer)
+        {
+            calcAmount();
+
+            //신작 영화의 경우 2일 이상 대여시 포인트 1원 추가 적립
+            if(daysRented > 1)
+            {
+                customer.addPoint();
+            }
+        }
+
+        public override void calcAmount()
+        {
+            this.amount += daysRented * 3;
+            Rental.totalAmount += this.amount;
+        }
+    }
+
+    public class CHILDRENS : Rental
+    {
+        public CHILDRENS(Movie movie, int idaysRented, Customer customer) : base(movie, idaysRented, customer)
+        {
+            calcAmount();
+        }
+
+        public override void calcAmount()
+        {
+            this.amount += 1.5;
+            if (daysRented > 3)
+                this.amount += (daysRented - 3) * 1.5;
+
+            Rental.totalAmount += this.amount;
+        }
+    }
+    #endregion
 }
