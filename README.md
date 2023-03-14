@@ -1,4 +1,4 @@
-# JdTheater
+# jd-rental-shop
 삼성메디슨 기술면접
 
 # [개선방향]
