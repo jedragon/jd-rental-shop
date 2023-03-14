@@ -19,8 +19,11 @@ namespace VideoRental
             //[개선방향]
             //영수증 문자열 만드는 로직 Customer 클래스에서 Rental 클래스로 변경
             //금액, 포인트 계산은 Rental 생성자에서 함
-            calcAmount(customer);
 
+            //금액 계산
+            calcAmount();
+
+            //포인트 계산
             calcPoint(customer);
         }
 
@@ -38,7 +41,7 @@ namespace VideoRental
         /// 금액 계산 메소드
         /// </summary>
         /// <param name="customer">고객 객체</param>
-        private void calcAmount(Customer customer)
+        private void calcAmount()
         {
             switch (rentedMovie.moviePriceCode)
             {
@@ -46,7 +49,7 @@ namespace VideoRental
                 //3일 부터는  2.0원 + 대여일 수 x 1.5원
                 case (int)DefConst.PriceCode.REGULAR:
                     this.amount += 2.0;
-                    if ( daysRented > 2)
+                    if (daysRented > 2)
                         this.amount += (daysRented - 2) * 1.5;
                     break;
 
@@ -68,7 +71,7 @@ namespace VideoRental
         }
 
 
-        
+
         /// <summary>
         /// 포인트 계산 메소드
         /// </summary>
@@ -91,7 +94,7 @@ namespace VideoRental
         //영수증 출력과 포인트, 금액계산 분리, 함수명 statement -> makeReceipt
         //기존 statement 함수는 함수명이 모호하고, 매개변수가 없어 함수 선언 수정
         /// <summary>
-        /// 영수증 출력 메소드
+        /// 초기 영수증 출력 메소드
         /// </summary>
         /// <param name="customerRental">대여한 영화 목록</param>
         /// <param name="cName"> 고객 이름</param>
@@ -118,8 +121,21 @@ namespace VideoRental
             receipt.AppendLine("Amount owed is " + Rental.totalAmount);
             receipt.AppendLine("You earned " + cPoint + " frequent renter points");
 
-            //////////////////신규 영수증 출력
-            enumerator.Reset();
+            return receipt.ToString();
+        }
+
+        /// <summary>
+        /// 신규 영수증 출력 메소드
+        /// </summary>
+        /// <param name="customerRental">대여한 영화 목록</param>
+        /// <param name="cName"> 고객 이름</param>
+        /// <param name="cPoint">고객이 얻은 포인트</param>
+        /// <returns> 신규 영수증 문자열</returns>
+        public static string makeReceiptNew(List<Rental> customerRental, string cName, int cPoint)
+        {
+            IEnumerator<Rental> enumerator = customerRental.GetEnumerator();
+            StringBuilder newReceipt = new StringBuilder(); //신규 영수증
+
             newReceipt.AppendLine("\r\n");
             newReceipt.AppendLine("ㅡㅡㅡㅡㅡㅡㅡ" + "JD's Movie Rental Shop" + "ㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
             newReceipt.AppendLine($"Customer Name : {cName}");
@@ -141,9 +157,7 @@ namespace VideoRental
             newReceipt.AppendFormat("Total Amount : {0}\r\n".PadLeft(50), Rental.totalAmount);
             newReceipt.AppendFormat("Your Point : {0}\r\n".PadLeft(50), cPoint);
 
-            receipt.AppendFormat("{0}", newReceipt);
-
-            return receipt.ToString();
+            return newReceipt.ToString();
         }
         #endregion
     }
