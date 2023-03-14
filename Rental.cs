@@ -20,17 +20,24 @@ namespace VideoRental
             //영수증 문자열 만드는 로직 Customer 클래스에서 Rental 클래스로 변경
             //금액, 포인트 계산은 Rental 생성자에서 함
             calcAmount(customer);
+
+            calcPoint(customer);
         }
 
         private Movie rentedMovie { get; }
         private int daysRented { get; set; } //변수명 nDaysRented -> daysRented 로 변경
         private double amount { get; set; }
-        public static int rentPoint = 0;//static 변수로 포인트 관리, 변수명 mFrequentRenterPoints -> rentPoint로 변경
         public static double totalAmount = 0.0;//static 변수로 최종금액 관리
 
+
+        #region 금액/포인트 계산
         //[개선방향]
         //영수증 문자열 만드는 로직 Customer 클래스에서 Rental 클래스로 변경
         //금액, 포인트 계산은 Rental 생성자에서 함
+        /// <summary>
+        /// 금액 계산 메소드
+        /// </summary>
+        /// <param name="customer">고객 객체</param>
         private void calcAmount(Customer customer)
         {
             switch (rentedMovie.moviePriceCode)
@@ -57,6 +64,17 @@ namespace VideoRental
                     break;
             }
 
+            totalAmount += this.amount;
+        }
+
+
+        
+        /// <summary>
+        /// 포인트 계산 메소드
+        /// </summary>
+        /// <param name="customer">고객 객체</param>
+        private void calcPoint(Customer customer)
+        {
             // Add frequent renter points
             customer.addPoint();
             // Add bonus for a two day new release rental
@@ -65,13 +83,20 @@ namespace VideoRental
             {
                 customer.addPoint();
             }
-
-            totalAmount += this.amount;
         }
+        #endregion
 
+        #region 영수증 출력
         //[개선방향]
         //영수증 출력과 포인트, 금액계산 분리, 함수명 statement -> makeReceipt
         //기존 statement 함수는 함수명이 모호하고, 매개변수가 없어 함수 선언 수정
+        /// <summary>
+        /// 영수증 출력 메소드
+        /// </summary>
+        /// <param name="customerRental">대여한 영화 목록</param>
+        /// <param name="cName"> 고객 이름</param>
+        /// <param name="cPoint">고객이 얻은 포인트</param>
+        /// <returns> 영수증 문자열</returns>
         public static string makeReceipt(List<Rental> customerRental, string cName, int cPoint)
         {
             StringBuilder receipt = new StringBuilder();     //구 영수증
@@ -120,6 +145,6 @@ namespace VideoRental
 
             return receipt.ToString();
         }
-
+        #endregion
     }
 }
